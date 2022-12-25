@@ -37,4 +37,36 @@ class FluxAndMonoServicesTest {
                 .expectNext("AUDI","BENZ")
                 .verifyComplete();
     }
+
+    @Test
+    void carMonoFlatMap() {
+        StepVerifier.create(fluxAndMonoServices.carMonoFlatMap())
+                .expectNextCount(1)
+                .verifyComplete();
+
+    }
+
+    @Test
+    void carsFluxFlatMapAsync() {
+        String s="AudiBMWBenz";
+        StepVerifier.create(fluxAndMonoServices.carsFluxFlatMapAsync())
+                .expectNextCount(s.length())
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxConcatMapAsync() {
+        String s="AudiBMWBenz";
+        StepVerifier.create(fluxAndMonoServices.carsFluxFlatMapAsync())
+                .expectNextCount(s.length())
+                .verifyComplete();
+    }
+
+    @Test
+    void carMonoFlatMapMany() {
+        String s="BMW";
+        StepVerifier.create(fluxAndMonoServices.carMonoFlatMapMany())
+                .expectNextCount(s.length())
+                .verifyComplete();
+    }
 }
