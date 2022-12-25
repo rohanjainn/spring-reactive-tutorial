@@ -17,4 +17,25 @@ public class FluxAndMonoServices {
         return Mono.just("BMW").log();
     }
 
+    /**
+     * Map Operator
+     * @return
+     */
+    public Flux<String> carsFluxMap(){
+        return Flux.fromIterable(List.of("Audi","BMW","Benz"))
+                .map(String::toUpperCase)
+                .log();
+    }
+
+    /**
+     * Filter operator
+     * @return
+     */
+    public Flux<String> carsFluxFilter(){
+        return Flux.fromIterable(List.of("Audi","BMW","Benz"))
+                .map(String::toUpperCase)
+                .filter(str->str.length()>3)
+                .log();
+    }
+
 }

@@ -23,4 +23,18 @@ class FluxAndMonoServicesTest {
                 .expectNext("BMW")
                 .verifyComplete();
     }
+
+    @Test
+    void carsFluxMap() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxMap())
+                .expectNext("AUDI","BMW","BENZ")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxFilter() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxFilter())
+                .expectNext("AUDI","BENZ")
+                .verifyComplete();
+    }
 }
