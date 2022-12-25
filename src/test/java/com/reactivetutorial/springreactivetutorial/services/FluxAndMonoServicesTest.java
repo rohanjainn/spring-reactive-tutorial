@@ -1,10 +1,7 @@
 package com.reactivetutorial.springreactivetutorial.services;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FluxAndMonoServicesTest {
 
@@ -67,6 +64,27 @@ class FluxAndMonoServicesTest {
         String s="BMW";
         StepVerifier.create(fluxAndMonoServices.carMonoFlatMapMany())
                 .expectNextCount(s.length())
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxTransform() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxTransform(3))
+                .expectNext("AUDI","BENZ")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxTransformDefaultIfEmpty() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxTransformDefaultIfEmpty(5))
+                .expectNext("default")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxTransformSwitchIfEmpty() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxTransformSwitchIfEmpty(5))
+                .expectNext("Hyundai","Suzuki","Ford")
                 .verifyComplete();
     }
 }

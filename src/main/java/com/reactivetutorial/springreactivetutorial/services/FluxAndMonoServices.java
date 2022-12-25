@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 @Service
 public class FluxAndMonoServices {
@@ -58,6 +59,50 @@ public class FluxAndMonoServices {
         return Flux.fromIterable(List.of("Audi","BMW","Benz"))
                 .map(String::toUpperCase)
                 .filter(str->str.length()>3)
+                .log();
+    }
+
+    /***
+     * use Functional Interface
+     * Transform operator
+     * @return
+     */
+    public Flux<String> carsFluxTransform(int length){
+
+        Function<Flux<String>,Flux<String>> filterCars=data->data.filter(s->s.length()>length);
+        return Flux.fromIterable(List.of("Audi","BMW","Benz"))
+                .map(String::toUpperCase)
+                .transform(filterCars)
+                .log();
+    }
+
+    /***
+     * defaultIfEmpty
+     * @param length
+     * @return
+     */
+    public Flux<String> carsFluxTransformDefaultIfEmpty(int length){
+
+        Function<Flux<String>,Flux<String>> filterCars=data->data.filter(s->s.length()>length);
+        return Flux.fromIterable(List.of("Audi","BMW","Benz"))
+                .map(String::toUpperCase)
+                .transform(filterCars)
+                .defaultIfEmpty("default")
+                .log();
+    }
+
+    /**
+     *
+     * @param length
+     * @return
+     */
+    public Flux<String> carsFluxTransformSwitchIfEmpty(int length){
+
+        Function<Flux<String>,Flux<String>> filterCars=data->data.filter(s->s.length()>length);
+        return Flux.fromIterable(List.of("Audi","BMW","Benz"))
+                .map(String::toUpperCase)
+                .transform(filterCars)
+                .switchIfEmpty(Flux.fromIterable(List.of("Hyundai","Suzuki","Ford")))
                 .log();
     }
 
