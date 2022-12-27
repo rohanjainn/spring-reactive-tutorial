@@ -104,15 +104,36 @@ class FluxAndMonoServicesTest {
 
     @Test
     void carsMonoMerge() {
-        StepVerifier.create(fluxAndMonoServices.carsMonoMerge())
+        StepVerifier.create(fluxAndMonoServices.carsFluxMerge())
                 .expectNextCount(4)
                 .verifyComplete();
     }
 
     @Test
     void carsMonoMergeWithSequential() {
-        StepVerifier.create(fluxAndMonoServices.carsMonoMergeWithSequential())
+        StepVerifier.create(fluxAndMonoServices.carsFluxMergeWithSequential())
                 .expectNext("Audi","BMW","Kia","Suzuki")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsMonoZip() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxZip())
+                .expectNext("AudiKia","BMWSuzuki")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsMonoZipTuple() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxZipTuple())
+                .expectNext("AudiKiaTesla","BMWSuzukiVolvo")
+                .verifyComplete();
+    }
+
+    @Test
+    void testCarsMonoZipTuple() {
+        StepVerifier.create(fluxAndMonoServices.carsMonoZipTuple())
+                .expectNext("AudiKiaTesla")
                 .verifyComplete();
     }
 }

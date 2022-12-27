@@ -163,7 +163,7 @@ public class FluxAndMonoServices {
      * merge operator - emits data async from publishers
      * @return
      */
-    public Flux<String> carsMonoMerge(){
+    public Flux<String> carsFluxMerge(){
         var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
         var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
 
@@ -174,11 +174,49 @@ public class FluxAndMonoServices {
      * mergeSequential - data emits sequentially
      * @return
      */
-    public Flux<String> carsMonoMergeWithSequential(){
+    public Flux<String> carsFluxMergeWithSequential(){
         var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
         var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
 
         return Flux.mergeSequential(luxCars,cars).log();
     }
 
+    /**
+     * Zip Operator - combine data from multiple publisher
+     * at max 8 publishers can be used
+     * @return
+     */
+    public Flux<String> carsFluxZip(){
+        var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
+        var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
+
+        return Flux.zip(luxCars,cars,(first,second)-> first+second).log();
+    }
+
+    /**
+     * zipwith tuple
+     * @return
+     */
+    public Flux<String> carsFluxZipTuple(){
+        var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
+        var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
+        var evs=Flux.just("Tesla","Volvo").delayElements(Duration.ofMillis(40));
+
+        return Flux.zip(luxCars,cars,evs)
+                .map(objects -> objects.getT1()+objects.getT2()+objects.getT3());
+    }
+
+
+    /**
+     * zip - Mono
+     * @return
+     */
+    public Mono<String> carsMonoZipTuple(){
+        var luxCars=Mono.just("Audi").delayElement(Duration.ofMillis(60));
+        var cars=Mono.just("Kia").delayElement(Duration.ofMillis(40));
+        var evs=Mono.just("Tesla").delayElement(Duration.ofMillis(40));
+
+        return Mono.zip(luxCars,cars,evs)
+                .map(objects -> objects.getT1()+objects.getT2()+objects.getT3());
+    }
 }
