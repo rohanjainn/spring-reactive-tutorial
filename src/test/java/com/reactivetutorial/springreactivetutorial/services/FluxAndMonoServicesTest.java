@@ -87,4 +87,32 @@ class FluxAndMonoServicesTest {
                 .expectNext("Hyundai","Suzuki","Ford")
                 .verifyComplete();
     }
+
+    @Test
+    void carsFluxConcat() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxConcat())
+                .expectNext("Audi","BMW","Kia","Suzuki")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsMonoConcatWith() {
+        StepVerifier.create(fluxAndMonoServices.carsMonoConcatWith())
+                .expectNext("Audi","Kia")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsMonoMerge() {
+        StepVerifier.create(fluxAndMonoServices.carsMonoMerge())
+                .expectNextCount(4)
+                .verifyComplete();
+    }
+
+    @Test
+    void carsMonoMergeWithSequential() {
+        StepVerifier.create(fluxAndMonoServices.carsMonoMergeWithSequential())
+                .expectNext("Audi","BMW","Kia","Suzuki")
+                .verifyComplete();
+    }
 }

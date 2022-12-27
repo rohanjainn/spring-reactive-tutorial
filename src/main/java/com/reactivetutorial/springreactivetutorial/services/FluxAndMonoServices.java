@@ -135,4 +135,50 @@ public class FluxAndMonoServices {
                 .log();
     }
 
+    /**
+     * sequential order
+     * concat
+     * @return
+     */
+    public Flux<String> carsFluxConcat(){
+
+        var luxCars=Flux.just("Audi","BMW");
+        var cars=Flux.just("Kia","Suzuki");
+
+        return Flux.concat(luxCars,cars).log();
+    }
+
+    /**
+     * concatWith operator
+     * @return
+     */
+    public Flux<String> carsMonoConcatWith(){
+        var luxCars=Mono.just("Audi");
+        var cars=Mono.just("Kia");
+
+        return luxCars.concatWith(cars);
+    }
+
+    /**
+     * merge operator - emits data async from publishers
+     * @return
+     */
+    public Flux<String> carsMonoMerge(){
+        var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
+        var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
+
+        return Flux.merge(luxCars,cars).log();
+    }
+
+    /**
+     * mergeSequential - data emits sequentially
+     * @return
+     */
+    public Flux<String> carsMonoMergeWithSequential(){
+        var luxCars=Flux.just("Audi","BMW").delayElements(Duration.ofMillis(60));
+        var cars=Flux.just("Kia","Suzuki").delayElements(Duration.ofMillis(40));
+
+        return Flux.mergeSequential(luxCars,cars).log();
+    }
+
 }
