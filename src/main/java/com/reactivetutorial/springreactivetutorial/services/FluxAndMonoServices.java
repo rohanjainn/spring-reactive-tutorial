@@ -219,4 +219,14 @@ public class FluxAndMonoServices {
         return Mono.zip(luxCars,cars,evs)
                 .map(objects -> objects.getT1()+objects.getT2()+objects.getT3());
     }
+
+    /**
+     * OnErrorReturn - handle exception & returns default value
+     * @return
+     */
+    public Flux<String> carsFluxOnErrorReturn(){
+        return Flux.just("Audi","Bmw")
+                .concatWith(Flux.error(new RuntimeException("Exception!!")))
+                .onErrorReturn("Cars");
+    }
 }

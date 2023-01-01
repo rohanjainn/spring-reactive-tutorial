@@ -136,4 +136,11 @@ class FluxAndMonoServicesTest {
                 .expectNext("AudiKiaTesla")
                 .verifyComplete();
     }
+
+    @Test
+    void carsFluxOnErrorReturn() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxOnErrorReturn())
+                .expectNext("Audi","Bmw","Cars")
+                .verifyComplete();
+    }
 }
