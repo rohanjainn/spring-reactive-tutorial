@@ -229,4 +229,54 @@ public class FluxAndMonoServices {
                 .concatWith(Flux.error(new RuntimeException("Exception!!")))
                 .onErrorReturn("Cars");
     }
+
+    /**
+     * OnErrorContinue - if exception occurs that element/data will be dropped
+     * @return
+     */
+    public Flux<String> carsFluxOnErrorContinue(){
+        return Flux.just("Audi","Bmw")
+                .map(s->{
+                    if(s.equalsIgnoreCase("Audi"))
+                        throw new RuntimeException("Exception!");
+                    return s.toUpperCase();
+                })
+                .onErrorContinue((e,obj)->{
+                    System.out.println("e="+e);
+                    System.out.println("obj="+obj);
+                });
+    }
+
+    /**
+     * onErrorMap - map exception to other exceptions(convert one exception to required custom exception)
+     * @return
+     */
+    public Flux<String> carsFluxOnErrorMap(){
+        return Flux.just("Audi","Bmw")
+                .map(s->{
+                    if(s.equalsIgnoreCase("Bmw"))
+                        throw new RuntimeException("Exception!");
+                    return s.toUpperCase();
+                })
+                .onErrorMap(obj->{
+                    System.out.println("obj="+obj);
+                    return new IllegalStateException("From onErrorMap");
+                });
+    }
+
+    /**
+     * doOnErrorMap - similar to try catch
+     * @return
+     */
+    public Flux<String> carsFluxDoOnError(){
+        return Flux.just("Audi","Bmw")
+                .map(s->{
+                    if(s.equalsIgnoreCase("Bmw"))
+                        throw new RuntimeException("Exception!");
+                    return s.toUpperCase();
+                })
+                .doOnError(obj->{
+                    System.out.println("obj="+obj);
+                });
+    }
 }

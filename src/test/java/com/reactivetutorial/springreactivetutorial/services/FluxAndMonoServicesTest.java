@@ -143,4 +143,27 @@ class FluxAndMonoServicesTest {
                 .expectNext("Audi","Bmw","Cars")
                 .verifyComplete();
     }
+
+    @Test
+    void carsFluxOnErrorContinue() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxOnErrorContinue())
+                .expectNext("BMW")
+                .verifyComplete();
+    }
+
+    @Test
+    void carsFluxOnErrorMap() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxOnErrorMap())
+                .expectNext("AUDI")
+                .expectError(IllegalStateException.class)
+                .verify();
+    }
+
+    @Test
+    void carsFluxDoOnError() {
+        StepVerifier.create(fluxAndMonoServices.carsFluxDoOnError())
+                .expectNext("AUDI")
+                .expectError(RuntimeException.class)
+                .verify();
+    }
 }
