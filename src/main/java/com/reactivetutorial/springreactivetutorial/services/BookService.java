@@ -1,5 +1,6 @@
 package com.reactivetutorial.springreactivetutorial.services;
 
+import com.reactivetutorial.springreactivetutorial.exception.BookException;
 import com.reactivetutorial.springreactivetutorial.model.Book;
 import com.reactivetutorial.springreactivetutorial.model.Review;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,11 @@ public class BookService {
         return books.flatMap(bookInfo -> {
             Mono<List<Review>> reviews = reviewService.getReviews(bookInfo.getBookId()).collectList();
             return reviews.map(review->new Book(bookInfo,review));
-        }).log();
+        }).onErrorMap(throwable -> {
+            log.error("Exception - "+throwable);
+            return new BookException("Exception occured while fetching books");
+        })
+        .log();
     }
 
     public Mono<Book> getBookById(long id){
