@@ -28,4 +28,14 @@ class BookServiceTest {
                 })
                 .verifyComplete();
     }
+
+    @Test
+    void getBookById() {
+        var book=bookService.getBookById(1);
+        StepVerifier.create(book)
+                .assertNext(b->{
+                    assertEquals("book1",b.getBookInfo().getTitle());
+                    assertEquals(2,b.getReviews().size());
+                }).verifyComplete();
+    }
 }
